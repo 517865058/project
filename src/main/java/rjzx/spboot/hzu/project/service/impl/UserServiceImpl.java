@@ -1,7 +1,10 @@
 package rjzx.spboot.hzu.project.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import rjzx.spboot.hzu.project.entity.User;
 import rjzx.spboot.hzu.project.dao.UserDao;
+import rjzx.spboot.hzu.project.mapper.UserMapper;
+import rjzx.spboot.hzu.project.service.MailService;
 import rjzx.spboot.hzu.project.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,15 @@ import java.util.List;
  */
 @Service("userService")
 public class UserServiceImpl implements UserService {
+    @Autowired
+    private UserMapper userMapper;
+
+    /**
+     * 注入邮件接口
+     */
+    @Autowired
+    private MailService mailService;
+
     @Resource
     private UserDao userDao;
 
@@ -63,7 +75,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(User user) {
         this.userDao.update(user);
-        return this.queryById(user.getUserid());
+        return this.queryById(user.getUserid().toString());
     }
 
     /**
@@ -76,4 +88,51 @@ public class UserServiceImpl implements UserService {
     public boolean deleteById(String userid) {
         return this.userDao.deleteById(userid) > 0;
     }
+
+    /**
+     * 用户注册, 同时发送一封邮件
+     * @param user
+     */
+    @Override
+    public void register(User user) {
+        userMapper.register(user);
+        String permission = user.getPermission();
+        System.out.println("code: " + permission);
+        String subject = "来自XXX的激活邮件";
+        String context = user.getUsername() + "用户您好!" +
+                "\n这是您账号的激活邮件: \n"+
+                "激活请点击:"+
+                "http://127.0.0.1:8080/user/checkCode?code=" + permission;
+        mailService.sendRegisterEmail (user.getEmail(), subject, context);
+    }
+
+    /**
+     * 根据激活码code进行查询用户, 之后再进行修改状态
+     * @param code
+     * @return
+     */
+    @Override
+    public User checkCode(String code) {
+        return userMapper.checkCode(code);
+    }
+
+    /**
+     * 激活账号, 修改用户状态
+     * @param user
+     */
+    @Override
+    public void updateUserRole(User user) {
+        userMapper.updateUserRole(user);
+    }
+
+    @Override
+    public User checkUser(User user) {
+        return userMapper.checkUserByUsername(user);
+    }
+
+    @Override
+    public Integer selectUserIdMax() {
+        return userMapper.selectUserIdMax();
+    }
+
 }
