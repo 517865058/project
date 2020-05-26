@@ -19,7 +19,6 @@ public class MailServiceImpl implements MailService {
         message.setText(content);
         message.setTo(to);
         message.setFrom("619489277@qq.com");
-        System.out.println("邮件已发送");
         mailSender.send(message);
     }
 }

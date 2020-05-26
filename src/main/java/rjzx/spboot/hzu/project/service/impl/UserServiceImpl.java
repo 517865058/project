@@ -97,7 +97,6 @@ public class UserServiceImpl implements UserService {
     public void register(User user) {
         userMapper.register(user);
         String permission = user.getPermission();
-        System.out.println("code: " + permission);
         String subject = "来自XXX的激活邮件";
         String context = user.getUsername() + "用户您好!" +
                 "\n这是您账号的激活邮件: \n"+
