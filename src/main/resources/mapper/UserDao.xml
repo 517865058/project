@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rjzx.spboot.hzu.project.dao.UserDao">
+
+    <resultMap type="rjzx.spboot.hzu.project.entity.User" id="UserMap">
+        <result property="userid" column="UserId" jdbcType="VARCHAR"/>
+        <result property="userpwd" column="UserPwd" jdbcType="VARCHAR"/>
+        <result property="username" column="UserName" jdbcType="VARCHAR"/>
+        <result property="permission" column="Permission" jdbcType="OTHER"/>
+        <result property="role" column="Role" jdbcType="INTEGER"/>
+        <result property="team" column="Team" jdbcType="VARCHAR"/>
+        <result property="phone" column="Phone" jdbcType="VARCHAR"/>
+        <result property="email" column="Email" jdbcType="VARCHAR"/>
+        <result property="college" column="College" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UserMap">
+        select
+          UserId, UserPwd, UserName, Permission, Role, Team, Phone, Email, College
+        from hzuspbproject.user
+        where UserId = #{userid}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UserMap">
+        select
+          UserId, UserPwd, UserName, Permission, Role, Team, Phone, Email, College
+        from hzuspbproject.user
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="UserMap">
+        select
+          UserId, UserPwd, UserName, Permission, Role, Team, Phone, Email, College
+        from hzuspbproject.user
+        <where>
+            <if test="userid != null and userid != ''">
+                and UserId = #{userid}
+            </if>
+            <if test="userpwd != null and userpwd != ''">
+                and UserPwd = #{userpwd}
+            </if>
+            <if test="username != null and username != ''">
+                and UserName = #{username}
+            </if>
+            <if test="permission != null">
+                and Permission = #{permission}
+            </if>
+            <if test="role != null">
+                and Role = #{role}
+            </if>
+            <if test="team != null and team != ''">
+                and Team = #{team}
+            </if>
+            <if test="phone != null and phone != ''">
+                and Phone = #{phone}
+            </if>
+            <if test="email != null and email != ''">
+                and Email = #{email}
+            </if>
+            <if test="college != null and college != ''">
+                and College = #{college}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="userid" useGeneratedKeys="true">
+        insert into hzuspbproject.user(UserPwd, UserName, Permission, Role, Team, Phone, Email, College)
+        values (#{userpwd}, #{username}, #{permission}, #{role}, #{team}, #{phone}, #{email}, #{college})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update hzuspbproject.user
+        <set>
+            <if test="userpwd != null and userpwd != ''">
+                UserPwd = #{userpwd},
+            </if>
+            <if test="username != null and username != ''">
+                UserName = #{username},
+            </if>
+            <if test="permission != null">
+                Permission = #{permission},
+            </if>
+            <if test="role != null">
+                Role = #{role},
+            </if>
+            <if test="team != null and team != ''">
+                Team = #{team},
+            </if>
+            <if test="phone != null and phone != ''">
+                Phone = #{phone},
+            </if>
+            <if test="email != null and email != ''">
+                Email = #{email},
+            </if>
+            <if test="college != null and college != ''">
+                College = #{college},
+            </if>
+        </set>
+        where UserId = #{userid}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from hzuspbproject.user where UserId = #{userid}
+    </delete>
+
+</mapper>
