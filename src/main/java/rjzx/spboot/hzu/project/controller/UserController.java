@@ -1,15 +1,15 @@
 package rjzx.spboot.hzu.project.controller;
 
+import cn.hutool.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import rjzx.spboot.hzu.project.entity.User;
 import rjzx.spboot.hzu.project.service.UserService;
 import org.springframework.web.bind.annotation.*;
 import rjzx.spboot.hzu.project.util.ResPonseUtil.BaseResponse;
 import rjzx.spboot.hzu.project.util.ResPonseUtil.StatusCode;
+import rjzx.spboot.hzu.project.util.UUIDUtils;
 import rjzx.spboot.hzu.project.util.VerificationCodeUtil;
 
-import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +49,9 @@ public class UserController {
         System.out.println("id:"+user.getUserid()+"\nmm:"+user.getUserpwd()+"\nyzm:"+requestCode);
         if (cookies!=null&&cookies.length!=0){
             for (Cookie cookie : cookies) {
-                if (!cookie.getName().equals("token")&&!cookie.getName().equals("JSESSIONID"))continue;
+                if (!cookie.getName().equals("token")&&!cookie.getName().equals("JSESSIONID")) {
+                    continue;
+                }
                 String cookieValue=cookie.getValue();
                 if (cookieValue!=null&&!cookieValue.equals("")){
                     System.out.println(cookieValue);
@@ -58,7 +60,7 @@ public class UserController {
                     if (requestCode.toUpperCase().equals(code)){
                         //验证码正确
                         //通过提交的登录信息从数据库查询用户
-                        User loginUser=userService.queryById(user.getUserid());
+                        User loginUser=userService.queryById(user.getUserid().toString());
                         //判断用户是否存在
                         if (loginUser!=null){
                             //用户存在，匹配密码
@@ -136,6 +138,43 @@ public class UserController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public BaseResponse register(@RequestBody JSONObject jsonObject){
+        User user = new User();
+        user.setUsername(jsonObject.get("username").toString());
+        user.setUserpwd(jsonObject.get("password").toString());
+        user.setEmail(jsonObject.get("email").toString());
+        user.setUserid(userService.selectUserIdMax() + 1);
+
+        if (userService.checkUser(user) != null){
+            return new BaseResponse(StatusCode.RegisterFail);
+        }
+
+        user.setRole(0);
+        String permission = UUIDUtils.getUUID() + UUIDUtils.getUUID();
+        user.setPermission(permission);
+        userService.register(user);
+        return new BaseResponse(StatusCode.RegisterSuccess);
+
+
+
+    }
+
+    @RequestMapping(value = "/checkCode")
+    public String checkCode(String code){
+        User user = userService.checkCode(code);
+
+        //如果用户不等于null，把用户状态修改status=1
+        if (user != null){
+            user.setRole(1);
+            //把code验证码清空，已经不需要了
+            user.setPermission("");
+            userService.updateUserRole(user);
+        }
+        return "active";
     }
 
 }

@@ -52,4 +52,36 @@ public interface UserService {
      */
     boolean deleteById(String userid);
 
+
+    /**
+     * 用户注册
+     * @param user
+     */
+    void register(User user);
+
+    /**
+     * 根据激活码code查询用户, 之后再进行状态修改
+     * @param code
+     * @return
+     */
+    User checkCode(String code);
+
+    /**
+     * 激活账户, 修改用户状态为"1"
+     * @param user
+     */
+    void updateUserRole(User user);
+
+    /**
+     * 查询用户
+     * @param user
+     * @return
+     */
+    User checkUser(User user);
+
+    /**
+     * 获取用户ID最大值
+     * @return
+     */
+    Integer selectUserIdMax();
 }

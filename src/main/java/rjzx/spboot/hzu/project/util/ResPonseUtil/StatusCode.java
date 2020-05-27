@@ -3,9 +3,11 @@ package rjzx.spboot.hzu.project.util.ResPonseUtil;
 public enum StatusCode {
 
     Success(1,"success","登录成功"),
+    RegisterSuccess(2,"success","注册成功"),
     Fail(-1,"fail","密码错误"),
     UserNoExit(-2,"fail","用户不存在"),
-    VeriCodeErr(-3,"error","验证码错误");
+    VeriCodeErr(-3,"error","验证码错误"),
+    RegisterFail(-4,"fail","注册失败,用户已存在");
 
     private Integer code;//状态码
     private String status;//状态

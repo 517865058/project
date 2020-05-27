@@ -11,8 +11,8 @@ import java.io.Serializable;
 
 public class User implements Serializable {
     private static final long serialVersionUID = -44384175058896229L;
-    
-    private String userid;
+
+    private Integer userid;
     
     private String userpwd;
     /**
@@ -20,11 +20,11 @@ public class User implements Serializable {
     */
     private String username;
     /**
-    * 是否验证
+    * 是否验证,激活码
     */
-    private Object permission;
+    private String permission;
     /**
-    * 角色：0学生；1指导教师；2二级学院负责人；3教务处负责人；4评审专家
+    * 角色：0未激活；1学生；2指导教师；3二级学院负责人；4教务处负责人；5评审专家
     */
     private Integer role;
     /**
@@ -41,11 +41,11 @@ public class User implements Serializable {
     private String college;
 
 
-    public String getUserid() {
+    public Integer getUserid() {
         return userid;
     }
 
-    public void setUserid(String userid) {
+    public void setUserid(Integer userid) {
         this.userid = userid;
     }
 
@@ -65,11 +65,11 @@ public class User implements Serializable {
         this.username = username;
     }
 
-    public Object getPermission() {
+    public String getPermission() {
         return permission;
     }
 
-    public void setPermission(Object permission) {
+    public void setPermission(String permission) {
         this.permission = permission;
     }
 
@@ -113,4 +113,18 @@ public class User implements Serializable {
         this.college = college;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "userid='" + userid + '\'' +
+                ", userpwd='" + userpwd + '\'' +
+                ", username='" + username + '\'' +
+                ", permission=" + permission +
+                ", role=" + role +
+                ", team='" + team + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", college='" + college + '\'' +
+                '}';
+    }
 }
