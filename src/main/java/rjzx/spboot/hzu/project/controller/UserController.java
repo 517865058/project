@@ -60,7 +60,7 @@ public class UserController {
                     if (requestCode.toUpperCase().equals(code)){
                         //验证码正确
                         //通过提交的登录信息从数据库查询用户
-                        User loginUser=userService.queryById(user.getUserid().toString());
+                        User loginUser=userService.queryById(user.getUserid());
                         //判断用户是否存在
                         if (loginUser!=null){
                             //用户存在，匹配密码
@@ -144,12 +144,12 @@ public class UserController {
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public BaseResponse register(@RequestBody JSONObject jsonObject){
         User user = new User();
-        user.setUsername(jsonObject.get("username").toString());
-        user.setUserpwd(jsonObject.get("password").toString());
+        user.setUserid(jsonObject.get("userid").toString());
+        user.setUserpwd(jsonObject.get("userpwd").toString());
         user.setEmail(jsonObject.get("email").toString());
-        user.setUserid(userService.selectUserIdMax() + 1);
+        user.setUsername(user.getUserid());
 
-        if (userService.checkUser(user) != null){
+        if (userService.selectUser(user) != null){
             return new BaseResponse(StatusCode.RegisterFail);
         }
 

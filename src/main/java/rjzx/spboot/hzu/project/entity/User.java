@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class User implements Serializable {
     private static final long serialVersionUID = -44384175058896229L;
 
-    private Integer userid;
+    private String userid;
     
     private String userpwd;
     /**
@@ -41,11 +41,11 @@ public class User implements Serializable {
     private String college;
 
 
-    public Integer getUserid() {
+    public String getUserid() {
         return userid;
     }
 
-    public void setUserid(Integer userid) {
+    public void setUserid(String userid) {
         this.userid = userid;
     }
 

@@ -31,7 +31,7 @@ public interface UserMapper {
      * 激活账号, 修改用户状态为"1"进行激活
      * @param user
      */
-    @Update("update user set Role = #{role}, Permission = null where Username = #{username}")
+    @Update("update user set Role = #{role}, Permission = null where UserId = #{userid}")
     void updateUserRole(User user);
 
 
@@ -40,8 +40,8 @@ public interface UserMapper {
      * @param user
      * @return
      */
-    @Select("select * from user where UserName = #{username}")
-    User checkUserByUsername(User user);
+    @Select("select * from user where UserId = #{userid}")
+    User selectUser(User user);
 
     /**
      * 获取用户表中ID最大值

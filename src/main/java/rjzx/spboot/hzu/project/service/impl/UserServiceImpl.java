@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(User user) {
         this.userDao.update(user);
-        return this.queryById(user.getUserid().toString());
+        return this.queryById(user.getUserid());
     }
 
     /**
@@ -125,8 +125,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User checkUser(User user) {
-        return userMapper.checkUserByUsername(user);
+    public User selectUser(User user) {
+        return userMapper.selectUser(user);
     }
 
     @Override
