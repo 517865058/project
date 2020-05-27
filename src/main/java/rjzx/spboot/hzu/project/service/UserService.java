@@ -77,7 +77,7 @@ public interface UserService {
      * @param user
      * @return
      */
-    User checkUser(User user);
+    User selectUser(User user);
 
     /**
      * 获取用户ID最大值
