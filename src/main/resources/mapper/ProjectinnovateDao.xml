@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rjzx.spboot.hzu.project.dao.ProjectinnovateDao">
+
+    <resultMap type="rjzx.spboot.hzu.project.entity.Projectinnovate" id="ProjectinnovateMap">
+        <result property="projectid" column="ProjectId" jdbcType="VARCHAR"/>
+        <result property="projectapprovalbasis" column="ProjectApprovalBasis" jdbcType="VARCHAR"/>
+        <result property="projectresearchplan" column="ProjectResearchPlan" jdbcType="VARCHAR"/>
+        <result property="projectfeatureinnovation" column="ProjectFeatureInnovation" jdbcType="VARCHAR"/>
+        <result property="projectresult" column="ProjectResult" jdbcType="VARCHAR"/>
+        <result property="membertasks" column="MemberTasks" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="ProjectinnovateMap">
+        select
+          ProjectId, ProjectApprovalBasis, ProjectResearchPlan, ProjectFeatureInnovation, ProjectResult, MemberTasks
+        from hzuspbproject.projectinnovate
+        where ProjectId = #{projectid}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="ProjectinnovateMap">
+        select
+          ProjectId, ProjectApprovalBasis, ProjectResearchPlan, ProjectFeatureInnovation, ProjectResult, MemberTasks
+        from hzuspbproject.projectinnovate
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="ProjectinnovateMap">
+        select
+          ProjectId, ProjectApprovalBasis, ProjectResearchPlan, ProjectFeatureInnovation, ProjectResult, MemberTasks
+        from hzuspbproject.projectinnovate
+        <where>
+            <if test="projectid != null and projectid != ''">
+                and ProjectId = #{projectid}
+            </if>
+            <if test="projectapprovalbasis != null and projectapprovalbasis != ''">
+                and ProjectApprovalBasis = #{projectapprovalbasis}
+            </if>
+            <if test="projectresearchplan != null and projectresearchplan != ''">
+                and ProjectResearchPlan = #{projectresearchplan}
+            </if>
+            <if test="projectfeatureinnovation != null and projectfeatureinnovation != ''">
+                and ProjectFeatureInnovation = #{projectfeatureinnovation}
+            </if>
+            <if test="projectresult != null and projectresult != ''">
+                and ProjectResult = #{projectresult}
+            </if>
+            <if test="membertasks != null and membertasks != ''">
+                and MemberTasks = #{membertasks}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="projectid" useGeneratedKeys="true">
+        insert into hzuspbproject.projectinnovate(ProjectApprovalBasis, ProjectResearchPlan, ProjectFeatureInnovation, ProjectResult, MemberTasks)
+        values (#{projectapprovalbasis}, #{projectresearchplan}, #{projectfeatureinnovation}, #{projectresult}, #{membertasks})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update hzuspbproject.projectinnovate
+        <set>
+            <if test="projectapprovalbasis != null and projectapprovalbasis != ''">
+                ProjectApprovalBasis = #{projectapprovalbasis},
+            </if>
+            <if test="projectresearchplan != null and projectresearchplan != ''">
+                ProjectResearchPlan = #{projectresearchplan},
+            </if>
+            <if test="projectfeatureinnovation != null and projectfeatureinnovation != ''">
+                ProjectFeatureInnovation = #{projectfeatureinnovation},
+            </if>
+            <if test="projectresult != null and projectresult != ''">
+                ProjectResult = #{projectresult},
+            </if>
+            <if test="membertasks != null and membertasks != ''">
+                MemberTasks = #{membertasks},
+            </if>
+        </set>
+        where ProjectId = #{projectid}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from hzuspbproject.projectinnovate where ProjectId = #{projectid}
+    </delete>
+
+</mapper>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rjzx.spboot.hzu.project.dao.ProjectentrepreneurshipDao">
+
+    <resultMap type="rjzx.spboot.hzu.project.entity.Projectentrepreneurship" id="ProjectentrepreneurshipMap">
+        <result property="projectid" column="ProjectId" jdbcType="VARCHAR"/>
+        <result property="projectstatus" column="ProjectStatus" jdbcType="INTEGER"/>
+        <result property="projectintroduction" column="ProjectIntroduction" jdbcType="VARCHAR"/>
+        <result property="projectoutline" column="ProjectOutline" jdbcType="VARCHAR"/>
+        <result property="planinnovation" column="PlanInnovation" jdbcType="VARCHAR"/>
+        <result property="planfeasibility" column="PlanFeasibility" jdbcType="VARCHAR"/>
+        <result property="financebudgetriskforcast" column="FinanceBudgetRiskForcast" jdbcType="VARCHAR"/>
+        <result property="statement" column="Statement" jdbcType="VARCHAR"/>
+        <result property="mainsignature" column="MainSignature" jdbcType="VARCHAR"/>
+        <result property="signdate" column="SignDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="ProjectentrepreneurshipMap">
+        select
+          ProjectId, ProjectStatus, ProjectIntroduction, ProjectOutline, PlanInnovation, PlanFeasibility, FinanceBudgetRiskForcast, Statement, MainSignature, SignDate
+        from hzuspbproject.projectentrepreneurship
+        where ProjectId = #{projectid}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="ProjectentrepreneurshipMap">
+        select
+          ProjectId, ProjectStatus, ProjectIntroduction, ProjectOutline, PlanInnovation, PlanFeasibility, FinanceBudgetRiskForcast, Statement, MainSignature, SignDate
+        from hzuspbproject.projectentrepreneurship
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="ProjectentrepreneurshipMap">
+        select
+          ProjectId, ProjectStatus, ProjectIntroduction, ProjectOutline, PlanInnovation, PlanFeasibility, FinanceBudgetRiskForcast, Statement, MainSignature, SignDate
+        from hzuspbproject.projectentrepreneurship
+        <where>
+            <if test="projectid != null and projectid != ''">
+                and ProjectId = #{projectid}
+            </if>
+            <if test="projectstatus != null">
+                and ProjectStatus = #{projectstatus}
+            </if>
+            <if test="projectintroduction != null and projectintroduction != ''">
+                and ProjectIntroduction = #{projectintroduction}
+            </if>
+            <if test="projectoutline != null and projectoutline != ''">
+                and ProjectOutline = #{projectoutline}
+            </if>
+            <if test="planinnovation != null and planinnovation != ''">
+                and PlanInnovation = #{planinnovation}
+            </if>
+            <if test="planfeasibility != null and planfeasibility != ''">
+                and PlanFeasibility = #{planfeasibility}
+            </if>
+            <if test="financebudgetriskforcast != null and financebudgetriskforcast != ''">
+                and FinanceBudgetRiskForcast = #{financebudgetriskforcast}
+            </if>
+            <if test="statement != null and statement != ''">
+                and Statement = #{statement}
+            </if>
+            <if test="mainsignature != null and mainsignature != ''">
+                and MainSignature = #{mainsignature}
+            </if>
+            <if test="signdate != null">
+                and SignDate = #{signdate}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="projectid" useGeneratedKeys="true">
+        insert into hzuspbproject.projectentrepreneurship(ProjectStatus, ProjectIntroduction, ProjectOutline, PlanInnovation, PlanFeasibility, FinanceBudgetRiskForcast, Statement, MainSignature, SignDate)
+        values (#{projectstatus}, #{projectintroduction}, #{projectoutline}, #{planinnovation}, #{planfeasibility}, #{financebudgetriskforcast}, #{statement}, #{mainsignature}, #{signdate})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update hzuspbproject.projectentrepreneurship
+        <set>
+            <if test="projectstatus != null">
+                ProjectStatus = #{projectstatus},
+            </if>
+            <if test="projectintroduction != null and projectintroduction != ''">
+                ProjectIntroduction = #{projectintroduction},
+            </if>
+            <if test="projectoutline != null and projectoutline != ''">
+                ProjectOutline = #{projectoutline},
+            </if>
+            <if test="planinnovation != null and planinnovation != ''">
+                PlanInnovation = #{planinnovation},
+            </if>
+            <if test="planfeasibility != null and planfeasibility != ''">
+                PlanFeasibility = #{planfeasibility},
+            </if>
+            <if test="financebudgetriskforcast != null and financebudgetriskforcast != ''">
+                FinanceBudgetRiskForcast = #{financebudgetriskforcast},
+            </if>
+            <if test="statement != null and statement != ''">
+                Statement = #{statement},
+            </if>
+            <if test="mainsignature != null and mainsignature != ''">
+                MainSignature = #{mainsignature},
+            </if>
+            <if test="signdate != null">
+                SignDate = #{signdate},
+            </if>
+        </set>
+        where ProjectId = #{projectid}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from hzuspbproject.projectentrepreneurship where ProjectId = #{projectid}
+    </delete>
+
+</mapper>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rjzx.spboot.hzu.project.dao.ProjectDao">
+
+    <resultMap type="rjzx.spboot.hzu.project.entity.Project" id="ProjectMap">
+        <result property="projectid" column="ProjectId" jdbcType="VARCHAR"/>
+        <result property="projectname" column="ProjectName" jdbcType="VARCHAR"/>
+        <result property="projectcatagory" column="ProjectCatagory" jdbcType="VARCHAR"/>
+        <result property="date" column="Date" jdbcType="TIMESTAMP"/>
+        <result property="expense" column="Expense" jdbcType="INTEGER"/>
+        <result property="teamid" column="TeamId" jdbcType="VARCHAR"/>
+        <result property="teacher" column="Teacher" jdbcType="VARCHAR"/>
+        <result property="projectbasicmatter" column="ProjectBasicMatter" jdbcType="VARCHAR"/>
+        <result property="teacherbasicmatter" column="TeacherBasicMatter" jdbcType="VARCHAR"/>
+        <result property="projectsummary" column="ProjectSummary" jdbcType="VARCHAR"/>
+        <result property="teacherevaluate" column="TeacherEvaluate" jdbcType="VARCHAR"/>
+        <result property="secondaryevaluate" column="SecondaryEvaluate" jdbcType="VARCHAR"/>
+        <result property="jwcopinions" column="JwcOpinions" jdbcType="VARCHAR"/>
+        <result property="totalscore" column="TotalScore" jdbcType="NUMERIC"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="ProjectMap">
+        select
+          ProjectId, ProjectName, ProjectCatagory, Date, Expense, TeamId, Teacher, ProjectBasicMatter, TeacherBasicMatter, ProjectSummary, TeacherEvaluate, SecondaryEvaluate, JwcOpinions, TotalScore
+        from hzuspbproject.project
+        where ProjectId = #{projectid}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="ProjectMap">
+        select
+          ProjectId, ProjectName, ProjectCatagory, Date, Expense, TeamId, Teacher, ProjectBasicMatter, TeacherBasicMatter, ProjectSummary, TeacherEvaluate, SecondaryEvaluate, JwcOpinions, TotalScore
+        from hzuspbproject.project
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="ProjectMap">
+        select
+          ProjectId, ProjectName, ProjectCatagory, Date, Expense, TeamId, Teacher, ProjectBasicMatter, TeacherBasicMatter, ProjectSummary, TeacherEvaluate, SecondaryEvaluate, JwcOpinions, TotalScore
+        from hzuspbproject.project
+        <where>
+            <if test="projectid != null and projectid != ''">
+                and ProjectId = #{projectid}
+            </if>
+            <if test="projectname != null and projectname != ''">
+                and ProjectName = #{projectname}
+            </if>
+            <if test="projectcatagory != null and projectcatagory != ''">
+                and ProjectCatagory = #{projectcatagory}
+            </if>
+            <if test="date != null">
+                and Date = #{date}
+            </if>
+            <if test="expense != null">
+                and Expense = #{expense}
+            </if>
+            <if test="teamid != null and teamid != ''">
+                and TeamId = #{teamid}
+            </if>
+            <if test="teacher != null and teacher != ''">
+                and Teacher = #{teacher}
+            </if>
+            <if test="projectbasicmatter != null and projectbasicmatter != ''">
+                and ProjectBasicMatter = #{projectbasicmatter}
+            </if>
+            <if test="teacherbasicmatter != null and teacherbasicmatter != ''">
+                and TeacherBasicMatter = #{teacherbasicmatter}
+            </if>
+            <if test="projectsummary != null and projectsummary != ''">
+                and ProjectSummary = #{projectsummary}
+            </if>
+            <if test="teacherevaluate != null and teacherevaluate != ''">
+                and TeacherEvaluate = #{teacherevaluate}
+            </if>
+            <if test="secondaryevaluate != null and secondaryevaluate != ''">
+                and SecondaryEvaluate = #{secondaryevaluate}
+            </if>
+            <if test="jwcopinions != null and jwcopinions != ''">
+                and JwcOpinions = #{jwcopinions}
+            </if>
+            <if test="totalscore != null">
+                and TotalScore = #{totalscore}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="projectid" useGeneratedKeys="true">
+        insert into hzuspbproject.project(ProjectName, ProjectCatagory, Date, Expense, TeamId, Teacher, ProjectBasicMatter, TeacherBasicMatter, ProjectSummary, TeacherEvaluate, SecondaryEvaluate, JwcOpinions, TotalScore)
+        values (#{projectname}, #{projectcatagory}, #{date}, #{expense}, #{teamid}, #{teacher}, #{projectbasicmatter}, #{teacherbasicmatter}, #{projectsummary}, #{teacherevaluate}, #{secondaryevaluate}, #{jwcopinions}, #{totalscore})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update hzuspbproject.project
+        <set>
+            <if test="projectname != null and projectname != ''">
+                ProjectName = #{projectname},
+            </if>
+            <if test="projectcatagory != null and projectcatagory != ''">
+                ProjectCatagory = #{projectcatagory},
+            </if>
+            <if test="date != null">
+                Date = #{date},
+            </if>
+            <if test="expense != null">
+                Expense = #{expense},
+            </if>
+            <if test="teamid != null and teamid != ''">
+                TeamId = #{teamid},
+            </if>
+            <if test="teacher != null and teacher != ''">
+                Teacher = #{teacher},
+            </if>
+            <if test="projectbasicmatter != null and projectbasicmatter != ''">
+                ProjectBasicMatter = #{projectbasicmatter},
+            </if>
+            <if test="teacherbasicmatter != null and teacherbasicmatter != ''">
+                TeacherBasicMatter = #{teacherbasicmatter},
+            </if>
+            <if test="projectsummary != null and projectsummary != ''">
+                ProjectSummary = #{projectsummary},
+            </if>
+            <if test="teacherevaluate != null and teacherevaluate != ''">
+                TeacherEvaluate = #{teacherevaluate},
+            </if>
+            <if test="secondaryevaluate != null and secondaryevaluate != ''">
+                SecondaryEvaluate = #{secondaryevaluate},
+            </if>
+            <if test="jwcopinions != null and jwcopinions != ''">
+                JwcOpinions = #{jwcopinions},
+            </if>
+            <if test="totalscore != null">
+                TotalScore = #{totalscore},
+            </if>
+        </set>
+        where ProjectId = #{projectid}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from hzuspbproject.project where ProjectId = #{projectid}
+    </delete>
+
+</mapper>

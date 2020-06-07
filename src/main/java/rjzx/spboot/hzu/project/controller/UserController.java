@@ -55,7 +55,10 @@ public class UserController {
                 String cookieValue=cookie.getValue();
                 if (cookieValue!=null&&!cookieValue.equals("")){
                     System.out.println(cookieValue);
-                    String code=request.getSession().getAttribute(cookieValue).toString();
+                    String code=null;
+                    if (request.getSession().getAttribute(cookieValue)!=null){
+                        code=request.getSession().getAttribute(cookieValue).toString();
+                    }
                     //判断验证码是否正确
                     if (requestCode.toUpperCase().equals(code)){
                         //验证码正确

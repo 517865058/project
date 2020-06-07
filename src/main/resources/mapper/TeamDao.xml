@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rjzx.spboot.hzu.project.dao.TeamDao">
+
+    <resultMap type="rjzx.spboot.hzu.project.entity.Team" id="TeamMap">
+        <result property="teamid" column="teamId" jdbcType="VARCHAR"/>
+        <result property="mainperson" column="mainPerson" jdbcType="VARCHAR"/>
+        <result property="otherperson" column="otherPerson" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TeamMap">
+        select
+          teamId, mainPerson, otherPerson
+        from hzuspbproject.team
+        where teamId = #{teamid}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TeamMap">
+        select
+          teamId, mainPerson, otherPerson
+        from hzuspbproject.team
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="TeamMap">
+        select
+          teamId, mainPerson, otherPerson
+        from hzuspbproject.team
+        <where>
+            <if test="teamid != null and teamid != ''">
+                and teamId = #{teamid}
+            </if>
+            <if test="mainperson != null and mainperson != ''">
+                and mainPerson = #{mainperson}
+            </if>
+            <if test="otherperson != null and otherperson != ''">
+                and otherPerson = #{otherperson}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="teamid" useGeneratedKeys="true">
+        insert into hzuspbproject.team(mainPerson, otherPerson)
+        values (#{mainperson}, #{otherperson})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update hzuspbproject.team
+        <set>
+            <if test="mainperson != null and mainperson != ''">
+                mainPerson = #{mainperson},
+            </if>
+            <if test="otherperson != null and otherperson != ''">
+                otherPerson = #{otherperson},
+            </if>
+        </set>
+        where teamId = #{teamid}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from hzuspbproject.team where teamId = #{teamid}
+    </delete>
+
+</mapper>
