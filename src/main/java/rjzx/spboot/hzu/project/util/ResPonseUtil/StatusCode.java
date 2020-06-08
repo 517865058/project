@@ -4,6 +4,9 @@ public enum StatusCode {
 
     Success(1,"success","登录成功"),
     RegisterSuccess(2,"success","注册成功"),
+    ProjectApplicationSuccess(3,"success","项目申请成功"),
+    ProjectApplicationFail(4,"fail","项目申请失败, 项目已存在"),
+    ProjectUpdateSuccess(5,"success","项目修改成功"),
     Fail(-1,"fail","密码错误"),
     UserNoExit(-2,"fail","用户不存在"),
     VeriCodeErr(-3,"error","验证码错误"),

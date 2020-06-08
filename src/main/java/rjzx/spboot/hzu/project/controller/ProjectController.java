@@ -1,9 +1,14 @@
 package rjzx.spboot.hzu.project.controller;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import rjzx.spboot.hzu.project.entity.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import rjzx.spboot.hzu.project.entity.*;
 import rjzx.spboot.hzu.project.service.ProjectService;
 import org.springframework.web.bind.annotation.*;
+import rjzx.spboot.hzu.project.util.ResPonseUtil.BaseResponse;
+import rjzx.spboot.hzu.project.util.ResPonseUtil.StatusCode;
 import rjzx.spboot.hzu.project.service.ProjectactualService;
 import rjzx.spboot.hzu.project.service.ProjectentrepreneurshipService;
 import rjzx.spboot.hzu.project.service.ProjectinnovateService;
@@ -153,6 +158,50 @@ public class ProjectController {
             return new BaseResponse(-2,"操作失败","用户未登录");
         }
 
+    }
+
+    /**
+     * 申请项目
+     * @param jsonObject
+     * @return BaseResponse 3: 项目申请成功, 4: 项目申请失败, 项目已存在
+     */
+    @ResponseBody
+    @RequestMapping(value = "/insertProject", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public BaseResponse insertProject(@RequestBody JSONObject jsonObject){
+        Project project = new Project(jsonObject.get("projectid").toString(),
+                jsonObject.get("projectname").toString(),
+                jsonObject.get("projectcatagory").toString(),
+                jsonObject.getDate("date"),
+                Integer.valueOf(jsonObject.get("expense").toString()),
+                jsonObject.get("teamid").toString(),
+                jsonObject.get("teacher").toString());
+        if (projectService.queryById(project.getProjectid()) != null){
+            return new BaseResponse(StatusCode.ProjectApplicationFail);
+        }else {
+            projectService.insert(project);
+            return new BaseResponse(StatusCode.ProjectApplicationSuccess);
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateProject", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public BaseResponse updateProject(@RequestBody JSONObject jsonObject){
+        Project project = new Project(jsonObject.get("projectid").toString(),
+                jsonObject.get("projectname").toString(),
+                jsonObject.get("projectcatagory").toString(),
+                jsonObject.getDate("date"),
+                Integer.valueOf(jsonObject.get("expense").toString()),
+                jsonObject.get("teamid").toString(),
+                jsonObject.get("teacher").toString());
+        projectService.update(project);
+        return new BaseResponse(StatusCode.ProjectUpdateSuccess);
+    }
+
+    @GetMapping("selectFeedback")
+    public String selectFeedback(String id) {
+        Project project = projectService.queryById(id);
+        String json = JSONUtil.toJsonStr(project);
+        return json;
     }
 
 }
