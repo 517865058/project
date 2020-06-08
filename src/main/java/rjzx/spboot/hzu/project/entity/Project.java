@@ -181,4 +181,16 @@ public class Project implements Serializable {
         this.totalscore = totalscore;
     }
 
+    public Project(String projectid, String projectname, String projectcatagory, Date date, Integer expense, String teamid, String teacher) {
+        this.projectid = projectid;
+        this.projectname = projectname;
+        this.projectcatagory = projectcatagory;
+        this.date = date;
+        this.expense = expense;
+        this.teamid = teamid;
+        this.teacher = teacher;
+    }
+
+    public Project() {
+    }
 }
