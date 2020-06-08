@@ -1,5 +1,6 @@
 package rjzx.spboot.hzu.project.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import rjzx.spboot.hzu.project.entity.Project;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * @author makejava
  * @since 2020-06-07 22:02:10
  */
+@Mapper
 public interface ProjectDao {
 
     /**
@@ -19,6 +21,14 @@ public interface ProjectDao {
      * @return 实例对象
      */
     Project queryById(String projectid);
+
+    /**
+     * 查询所有数据
+     *
+     * @return 对象列表
+     * @return
+     */
+    List<Project> queryAllProject();
 
     /**
      * 查询指定行数据

@@ -1,5 +1,6 @@
 package rjzx.spboot.hzu.project.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import rjzx.spboot.hzu.project.entity.Team;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * @author makejava
  * @since 2020-06-07 21:59:42
  */
+@Mapper
 public interface TeamDao {
 
     /**

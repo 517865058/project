@@ -31,6 +31,17 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     /**
+     * 查询所有数据
+     *
+     * @return 对象列表
+     * @return
+     */
+    @Override
+    public List<Project> queryAllProject() {
+        return projectDao.queryAllProject();
+    }
+
+    /**
      * 查询多条数据
      *
      * @param offset 查询起始位置

@@ -27,6 +27,13 @@
         where ProjectId = #{projectid}
     </select>
 
+    <!--查询所有-->
+    <select id="queryAllProject" resultMap="ProjectMap">
+        select
+               ProjectId, ProjectName, ProjectCatagory, Date, Expense, TeamId, Teacher, ProjectBasicMatter, TeacherBasicMatter, ProjectSummary, TeacherEvaluate, SecondaryEvaluate, JwcOpinions, TotalScore
+        from hzuspbproject.project
+    </select>
+
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="ProjectMap">
         select
