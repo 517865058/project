@@ -14,7 +14,9 @@ public class Team implements Serializable {
     * 团队ID
     */
     private String teamid;
-    
+    /**
+     * 队长
+     */
     private String mainperson;
     /**
     * 其他成员：数组，用|隔开

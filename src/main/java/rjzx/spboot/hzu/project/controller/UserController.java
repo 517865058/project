@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 
 /**
  * 用户表(User)表控制层
@@ -178,6 +179,30 @@ public class UserController {
             userService.updateUserRole(user);
         }
         return "active";
+    }
+
+    @RequestMapping(value = "/getUser",method = RequestMethod.GET)
+    public BaseResponse<User> getUser(HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest,String userId){
+        httpServletResponse.setHeader("Access-Control-Allow-Origin","file://");
+        httpServletResponse.setHeader("Access-Control-Allow-Credentials","true");
+        User user=(User)httpServletRequest.getSession().getAttribute("user");
+        //用户已登录
+        if (user!=null){
+            if (userId!=null &&!user.equals("")){
+                User userRes=userService.queryById(userId);
+                if (userRes!=null){
+                    BaseResponse<User> baseResponse=new BaseResponse<>(1,"success","查询成功");
+                    baseResponse.setData(userRes);
+                    return baseResponse;
+                }else {
+                    return new BaseResponse<>(-1,"fail","该用户不存在");
+                }
+            }else {
+                return new BaseResponse<>(-2,"fail","用户id不能为空");
+            }
+        }else {
+            return new BaseResponse(-2,"操作失败","用户未登录");
+        }
     }
 
 }

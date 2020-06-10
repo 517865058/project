@@ -12,10 +12,6 @@ import rjzx.spboot.hzu.project.util.ResPonseUtil.StatusCode;
 import rjzx.spboot.hzu.project.service.ProjectactualService;
 import rjzx.spboot.hzu.project.service.ProjectentrepreneurshipService;
 import rjzx.spboot.hzu.project.service.ProjectinnovateService;
-import rjzx.spboot.hzu.project.util.ResPonseUtil.BaseResponse;
-import rjzx.spboot.hzu.project.util.ResPonseUtil.StatusCode;
-
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -123,8 +119,16 @@ public class ProjectController {
         }
     }
 
+
+    /**
+     * 按项目ID获取完整项目详情
+     * @param httpServletRequest
+     * @param httpServletResponse
+     * @param projectId
+     * @return 1、成功   -1|-2、失败    -3、未登录
+     */
     @GetMapping("/getProject")
-    public BaseResponse getProjectById(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse,String projectId){
+    public BaseResponse<CompleteProject> getProjectById(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse,String projectId){
         httpServletResponse.setHeader("Access-Control-Allow-Origin","file://");
         httpServletResponse.setHeader("Access-Control-Allow-Credentials","true");
         User user=(User)httpServletRequest.getSession().getAttribute("user");
@@ -155,7 +159,7 @@ public class ProjectController {
                 return new BaseResponse(-2,"查询失败","项目不存在");
             }
         }else {
-            return new BaseResponse(-2,"操作失败","用户未登录");
+            return new BaseResponse(-3,"操作失败","用户未登录");
         }
 
     }
@@ -167,22 +171,36 @@ public class ProjectController {
      */
     @ResponseBody
     @RequestMapping(value = "/insertProject", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public BaseResponse insertProject(@RequestBody JSONObject jsonObject){
-        Project project = new Project(jsonObject.get("projectid").toString(),
-                jsonObject.get("projectname").toString(),
-                jsonObject.get("projectcatagory").toString(),
-                jsonObject.getDate("date"),
-                Integer.valueOf(jsonObject.get("expense").toString()),
-                jsonObject.get("teamid").toString(),
-                jsonObject.get("teacher").toString());
-        if (projectService.queryById(project.getProjectid()) != null){
-            return new BaseResponse(StatusCode.ProjectApplicationFail);
+    public BaseResponse insertProject(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse,@RequestBody JSONObject jsonObject){
+        httpServletResponse.setHeader("Access-Control-Allow-Origin","file://");
+        httpServletResponse.setHeader("Access-Control-Allow-Credentials","true");
+        User user=(User)httpServletRequest.getSession().getAttribute("user");
+        //用户已登录
+        if (user!=null){
+            Project project = new Project(jsonObject.get("projectid").toString(),
+                    jsonObject.get("projectname").toString(),
+                    jsonObject.get("projectcatagory").toString(),
+                    jsonObject.getDate("date"),
+                    Integer.valueOf(jsonObject.get("expense").toString()),
+                    jsonObject.get("teamid").toString(),
+                    jsonObject.get("teacher").toString());
+            if (projectService.queryById(project.getProjectid()) != null){
+                return new BaseResponse(StatusCode.ProjectApplicationFail);
+            }else {
+                projectService.insert(project);
+                return new BaseResponse(StatusCode.ProjectApplicationSuccess);
+            }
         }else {
-            projectService.insert(project);
-            return new BaseResponse(StatusCode.ProjectApplicationSuccess);
+            return new BaseResponse(-2,"操作失败","用户未登录");
         }
+
     }
 
+    /**
+     * 更新项目
+     * @param jsonObject
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/updateProject", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public BaseResponse updateProject(@RequestBody JSONObject jsonObject){
@@ -197,11 +215,49 @@ public class ProjectController {
         return new BaseResponse(StatusCode.ProjectUpdateSuccess);
     }
 
-    @GetMapping("selectFeedback")
+    @GetMapping("/selectFeedback")
     public String selectFeedback(String id) {
         Project project = projectService.queryById(id);
         String json = JSONUtil.toJsonStr(project);
         return json;
+    }
+
+    /**
+     * 专家评分
+     * @param httpServletRequest
+     * @param httpServletResponse
+     * @param jsonObject
+     * @return 1、成功  -1、失败  -2、失败，权限不足  -3、未登录
+     */
+    @RequestMapping(value = "/setScore",method = RequestMethod.POST,consumes = "application/json;charset=UTF-8")
+    public BaseResponse setScore(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse,@RequestBody JSONObject jsonObject){
+        httpServletResponse.setHeader("Access-Control-Allow-Origin","file://");
+        httpServletResponse.setHeader("Access-Control-Allow-Credentials","true");
+        User user=(User)httpServletRequest.getSession().getAttribute("user");
+        //用户已登录
+        if (user!=null) {
+            //用户角色为评审专家
+            if (user.getRole() == 5) {
+                String proId=jsonObject.get("projectId").toString();
+                Double score=(Double) jsonObject.get("score");
+                Project project=projectService.queryById(proId);
+                if (project!=null&&score!=null){
+                    project.setTotalscore(score);
+                    projectService.update(project);
+                    return new BaseResponse(1,"success","评分成功");
+                }else {
+                    return new BaseResponse(-1,"fail","评分失败，项目不存在");
+                }
+            }else {
+                //用户角色为其他
+                return new BaseResponse(-2,"fail","失败，权限不足");
+            }
+        }else {
+            return new BaseResponse(-3,"操作失败","用户未登录");
+        }
+
+
+
     }
 
 }
