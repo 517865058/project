@@ -260,4 +260,9 @@ public class ProjectController {
 
     }
 
+    @PostMapping("/test")
+    public void a(){
+        System.out.println("qwe");
+    }
+
 }

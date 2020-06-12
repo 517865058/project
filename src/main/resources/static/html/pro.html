@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>progressbar</title>
+	<!-- <link rel="import" href="product-add.html" id="addProject"/>
+	    <link rel="import" href="product-add01.html" id="addInnovate"/>
+	    <link rel="import" href="product-add02.html" id="addEntrepreneurship"/>
+	    <link rel="import" href="product-add05.html" id="addActual"/> -->
+	<style>
+		.steps_bar ul { border-left:solid 1px #ccc; overflow:hidden;}
+		.steps_bar ul li { float:left; height:60px; padding-right:19px; line-height:60px; text-align:center; background:url(static/stepbar.png) no-repeat 100% 0 #f1f1f1; font-weight:bold;}
+		.steps_bar ul li span { display:block; height:58px; padding:0 30px; background:#f1f1f1; border-top:solid 1px #ccc; border-bottom:solid 1px #ccc;}
+		.steps_bar ul li.done { color:#fff; background-position:100% -120px; background-color:#646464;}
+		.steps_bar ul li.current_prev { color:#fff; background-position:100% -60px; background-color:#646464;}
+		.steps_bar ul li.done span, .steps_bar ul li.current_prev span { background:#646464;}
+		.steps_bar ul li.current { color:#fff; background-color:#b70a06;}
+		.steps_bar ul li.current span { background:#b70a06;}
+		.steps_bar ul li.last { background-position:100% -180px; background-color:transparent;}
+		.steps_bar ul li.last span { background:#f1f1f1;}
+		.steps_bar ul li.last.current { background-position:100% -240px;}
+		.steps_bar ul li.last.current span { background:#b70a06;}
+	</style>
+
+	
+</head>
+<body>
+	<div class="steps_bar">
+		<ul>
+			<li id="1" class="current"><span>基本信息</span></li>
+			<li id="2" class=""><span>具体信息</span></li>
+			<li id="3" class=""><span>申报意见</span></li>
+			<li id="4" class="last"><span>申报结果</span></li>
+		</ul>
+	</div>
+    <iframe id="project" height="800px" width="100%" frameborder="0" scrolling="auto" src="product-add.html"></iframe>
+
+</body>
+</html>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
+<script type="text/javascript">
+    var src,step;
+		window.addEventListener('message', function (e) {
+            //let target = e.target;
+        let data = e.data;
+        src=data;
+        step=data.step;
+        console.log(data);
+        if (data.step==2) {
+            $("#project").attr("src",e.data.src);
+            $("#1").attr("class","current_prev");
+            $("#2").attr("class","current");
+            $("#3").attr("class","");
+            $("#4").attr("class","last");
+        }else if (data.step==3) {
+            $("#project").attr("src",e.data.src);
+            $("#1").attr("class","done");
+            $("#2").attr("class","current_prev");
+            $("#3").attr("class","current");
+            $("#4").attr("class","last");
+        }else if (data.step==4) {
+            $("#project").attr("src",e.data.src);
+            $("#1").attr("class","done");
+            $("#2").attr("class","done");
+            $("#3").attr("class","current_prev");
+            $("#4").attr("class","current");
+        }
+    }, false);
+		
+		$(function () {
+            $("#1").click(function () {
+                window.location.href="pro.html";
+                $("#1").attr("class","current");
+                $("#2").attr("class","");
+                $("#3").attr("class","");
+                $("#4").attr("class","last");
+            });
+            $("#2").click(function () {
+                if (src!=undefined&&step==2){
+                    $("#project").attr("src",src);
+                    $("#1").attr("class","current_prev");
+                    $("#2").attr("class","current");
+                    $("#3").attr("class","");
+                    $("#4").attr("class","last");
+                }
+            });
+            $("#3").click(function () {
+                if (src!=undefined&&step==3){
+                    $("#project").attr("src",src);
+                    $("#1").attr("class","done");
+                    $("#2").attr("class","current_prev");
+                    $("#3").attr("class","current");
+                    $("#4").attr("class","last");
+                }
+            });
+            $("#4").click(function () {
+                if (src!=undefined&&step==4){
+                    $("#project").attr("src",src);
+                    $("#1").attr("class","done");
+                    $("#2").attr("class","done");
+                    $("#3").attr("class","current_prev");
+                    $("#4").attr("class","current");
+                }
+            });
+        })
+</script>
