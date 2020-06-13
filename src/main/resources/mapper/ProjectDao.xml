@@ -94,9 +94,9 @@
     </select>
 
     <!--新增所有列-->
-    <insert id="insert" keyProperty="projectid" useGeneratedKeys="true">
-        insert into hzuspbproject.project(ProjectName, ProjectCatagory, Date, Expense, TeamId, Teacher, ProjectBasicMatter, TeacherBasicMatter, ProjectSummary, TeacherEvaluate, SecondaryEvaluate, JwcOpinions, TotalScore)
-        values (#{projectname}, #{projectcatagory}, #{date}, #{expense}, #{teamid}, #{teacher}, #{projectbasicmatter}, #{teacherbasicmatter}, #{projectsummary}, #{teacherevaluate}, #{secondaryevaluate}, #{jwcopinions}, #{totalscore})
+    <insert id="insert" parameterType="rjzx.spboot.hzu.project.entity.Project">
+        insert into hzuspbproject.project(ProjectId,ProjectName, ProjectCatagory, Date, Expense, TeamId, Teacher, ProjectBasicMatter, TeacherBasicMatter, ProjectSummary, TeacherEvaluate, SecondaryEvaluate, JwcOpinions, TotalScore)
+        values (#{projectid},#{projectname}, #{projectcatagory}, #{date}, #{expense}, #{teamid}, #{teacher}, #{projectbasicmatter}, #{teacherbasicmatter}, #{projectsummary}, #{teacherevaluate}, #{secondaryevaluate}, #{jwcopinions}, #{totalscore})
     </insert>
 
     <!--通过主键修改数据-->

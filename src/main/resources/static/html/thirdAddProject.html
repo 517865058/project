@@ -30,29 +30,29 @@
 </head>
 <body>
 <div class="page-container">
-    <form action="/project/test" method="post" class="form form-horizontal" id="form-article-add">
+    <form action="" method="post" class="form form-horizontal" id="form-article-add">
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>项目ID：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="" id="" name="">
+                <input type="text" class="input-text" value="" placeholder="" id="" name="projectid">
             </div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-2">指导教师意见：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="" id="" name="">
+                <input type="text" class="input-text" value="" placeholder="" id="" name="teacherevaluate">
             </div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-2">二级学院主管意见：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="" id="" name="">
+                <input type="text" class="input-text" value="" placeholder="" id="" name="secondaryevaluate">
             </div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-2">教务处审核意见：</label>
             <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="" id="" name="">
+                <input type="text" class="input-text" value="" placeholder="" id="" name="jwcopinions">
             </div>
         </div>
 
@@ -83,10 +83,49 @@
 <script type="text/javascript" src="lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript">
 
+    $(':submit').on('click',function(){
+        $.ajax({
+            url:"http://localhost:8080/project/addOthProject",
+            type:"post",
+            async:false,
+            xhrFields: {
+                withCredentials: true // 这里设置了withCredentials
+            },
+            data:JSON.stringify($('form').serializeObject()),
+            contentType:"application/json;charset=UTF-8",  //缺失会出现URL编码，无法转成json对象
+            success:function(e){
+                if (e.code==5){
+                    alert("项目申报成功");
+                    var message = {step:4,src:"result.html",status:e};
+                    window.parent.postMessage(message,"*");
+                    console.log("3");
+                }else {
+                    alert(e);
+                }
+                console.log(e);
+            }
+        });
+    });
+
+
+    $.fn.serializeObject = function() {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [ o[this.name] ];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+
     function article_save_submit(){
-        var message = {step:3,src:"result.html"};
-        window.parent.postMessage(message,"*");
-        console.log("2");
+
     }
 
     $(document).ready(function(){

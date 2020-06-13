@@ -30,18 +30,24 @@
 </head>
 <body>
 <div class="page-container">
-	<form action="" method="post" class="form form-horizontal" id="form-article-add">
+	<form action="" method="post" class="form form-horizontal" id="teamform">
 		
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">团队ID：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="" name="">
+				<input type="text" class="input-text" value="" placeholder="" id="" name="teamid">
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2">其他成员：数组，用|隔开</label>
+			<label class="form-label col-xs-4 col-sm-2">队长账户ID：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="" name="">
+				<input type="text" class="input-text" value="" placeholder="" id="" name="mainperson">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">其他成员账户id：数组，用|隔开</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="" name="otherperson">
 			</div>
 		</div>
 	
@@ -74,6 +80,41 @@
 <script type="text/javascript" src="lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript">
 $(function(){
+    $(':submit').on('click',function(){
+        $.ajax({
+            url:"/team/addTeam",
+            type:"post",
+            xhrFields: {
+                withCredentials: true // 这里设置了withCredentials
+            },
+            data:JSON.stringify($('#teamform').serializeObject()),
+            contentType:"application/json;charset=UTF-8",  //缺失会出现URL编码，无法转成json对象
+            success:function(e){
+                alert("成功");
+                console.log(e);
+            }
+        });
+    });
+
+
+    $.fn.serializeObject = function() {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [ o[this.name] ];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+
+
+
 	$('.skin-minimal input').iCheck({
 		checkboxClass: 'icheckbox-blue',
 		radioClass: 'iradio-blue',

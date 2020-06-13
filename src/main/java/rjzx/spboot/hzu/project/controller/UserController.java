@@ -44,7 +44,7 @@ public class UserController {
      */
     @RequestMapping(value = "/login",method = RequestMethod.POST,consumes = "application/x-www-form-urlencoded")
     public BaseResponse login(HttpServletRequest request,HttpServletResponse response,User user,String requestCode){
-        response.setHeader("Access-Control-Allow-Origin","file://");
+        response.setHeader("Access-Control-Allow-Origin","http://localhost:8080");
         response.setHeader("Access-Control-Allow-Credentials","true");
         Cookie[] cookies=request.getCookies();
         System.out.println("id:"+user.getUserid()+"\nmm:"+user.getUserpwd()+"\nyzm:"+requestCode);
@@ -59,6 +59,7 @@ public class UserController {
                     String code=null;
                     if (request.getSession().getAttribute(cookieValue)!=null){
                         code=request.getSession().getAttribute(cookieValue).toString();
+                        System.out.println(cookieValue+":"+code);
                     }
                     //判断验证码是否正确
                     if (requestCode.toUpperCase().equals(code)){
@@ -104,6 +105,7 @@ public class UserController {
     @RequestMapping("/getVeriCode")
     @ResponseBody
     public void getVeriCode(HttpServletResponse response, HttpServletRequest request,Integer t){
+        response.setHeader("Access-Control-Allow-Credentials","true");
         Cookie[] cookies=request.getCookies();
         BufferedImage codeImage=new BufferedImage(150,50,BufferedImage.TYPE_INT_RGB);
         String code= VerificationCodeUtil.drawVerificationCodeImg(150,50,codeImage);
@@ -112,26 +114,37 @@ public class UserController {
             System.out.println("cookie空，设置cookie");
             Cookie cookie=new Cookie("token",request.getSession().getId());
             cookie.setPath("/");
-            cookie.setMaxAge(120);
+            //cookie.setMaxAge(120);
             response.addCookie(cookie);
             request.getSession().setAttribute(cookie.getValue(),code.toUpperCase());
         }else {
+            Boolean setCook=false;
             for (Cookie cookie : cookies) {
 
                 if (cookie.getName().equals("token")){
                     if (cookie.getValue()!=null&&!cookie.getValue().equals("")){
                         request.getSession().setAttribute(cookie.getValue(),code.toUpperCase());
                         System.out.println(cookie.getValue());
+                        setCook=true;
                         break;
                     }
 
-                }else {
+                }else if (cookie.getName().equals("JSESSIONID")){
                     request.getSession().setAttribute(cookie.getValue(),code.toUpperCase());
                     System.out.println(cookie.getValue());
+                    setCook=true;
                     break;
                 }
 
             }
+            if (!setCook){
+                Cookie cookie=new Cookie("token",request.getSession().getId());
+                cookie.setPath("/");
+                //cookie.setMaxAge(120);
+                response.addCookie(cookie);
+                request.getSession().setAttribute(cookie.getValue(),code.toUpperCase());
+            }
+
         }
         response.setContentType("image/png");
         try {

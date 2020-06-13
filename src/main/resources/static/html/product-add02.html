@@ -30,67 +30,61 @@
 </head>
 <body>
 <div class="page-container">
-	<form action="/project/test" method="post" class="form form-horizontal" id="form-article-add">
+	<form action="" method="post" class="form form-horizontal" id="form-article-add">
 		
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">项目ID：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="" name="">
+				<input type="text" class="input-text" value="" placeholder="" id="" name="projectid">
 			</div>
 		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">项目现状：0、创意阶段；1创业计划；2、已经启动；3已经运营：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="" name="">
+				<input type="text" class="input-text" value="" placeholder="" id="" name="projectstatus">
 			</div>
 		</div>
 	
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">项目简介：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="" name="">
+				<input type="text" class="input-text" value="" placeholder="" id="" name="projectintroduction">
 			</div>
 		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">项目提纲：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="" name="">
+				<input type="text" class="input-text" value="" placeholder="" id="" name="projectoutline">
 			</div>
 		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">计划创新性：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="" name="">
+				<input type="text" class="input-text" value="" placeholder="" id="" name="planinnovation">
 			</div>
 		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">计划可行性：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="" name="">
+				<input type="text" class="input-text" value="" placeholder="" id="" name="planfeasibility">
 			</div>
 		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">财务预算与风险预测：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="" name="">
+				<input type="text" class="input-text" value="" placeholder="" id="" name="financebudgetriskforcast">
 			</div>
 		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">声明：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="" name="">
-			</div>
-		</div>
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2">日期：</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="" name="">
+				<input type="text" class="input-text" value="" placeholder="" id="" name="statement">
 			</div>
 		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">负责人签名：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="" name="">
+				<input type="text" class="input-text" value="" placeholder="" id="" name="mainsignature">
 			</div>
 		</div>
 		
@@ -122,12 +116,51 @@
 <script type="text/javascript" src="lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript">
     function article_save_submit(){
-        var message = {step:3,src:"thirdAddProject.html"};
-        window.parent.postMessage(message,"*");
-        console.log("3");
+
     }
 
 $(function(){
+
+    $(':submit').on('click',function(){
+        $.ajax({
+            url:"http://localhost:8080/projectentrepreneurship/addEntPro",
+            type:"post",
+            async:false,
+            xhrFields: {
+                withCredentials: true // 这里设置了withCredentials
+            },
+            data:JSON.stringify($('form').serializeObject()),
+            contentType:"application/json;charset=UTF-8",  //缺失会出现URL编码，无法转成json对象
+            success:function(e){
+                if (e.code==1){
+                    var message = {step:3,src:"thirdAddProject.html"};
+                    window.parent.postMessage(message,"*");
+                    console.log("3");
+				} else {
+                    alert(e);
+				}
+            }
+        });
+    });
+
+
+    $.fn.serializeObject = function() {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [ o[this.name] ];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+
+
 	$('.skin-minimal input').iCheck({
 		checkboxClass: 'icheckbox-blue',
 		radioClass: 'iradio-blue',

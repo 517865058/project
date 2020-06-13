@@ -43,9 +43,9 @@
     </select>
 
     <!--新增所有列-->
-    <insert id="insert" keyProperty="teamid" useGeneratedKeys="true">
-        insert into hzuspbproject.team(mainPerson, otherPerson)
-        values (#{mainperson}, #{otherperson})
+    <insert id="insert" parameterType="rjzx.spboot.hzu.project.entity.Team">
+        insert into hzuspbproject.team(teamId,mainPerson, otherPerson)
+        values (#{teamid},#{mainperson}, #{otherperson})
     </insert>
 
     <!--通过主键修改数据-->

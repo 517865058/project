@@ -13,6 +13,7 @@ import rjzx.spboot.hzu.project.util.ResPonseUtil.BaseResponse;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 /**
  * 创业训练项目表(Projectentrepreneurship)表控制层
@@ -42,14 +43,16 @@ public class ProjectentrepreneurshipController {
      */
     @RequestMapping(value = "/addEntPro",method = RequestMethod.POST,consumes = "application/json;charset=UTF-8")
     public BaseResponse addEntrepreneurshipProject(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, @RequestBody Projectentrepreneurship projectentrepreneurship){
-        httpServletResponse.setHeader("Access-Control-Allow-Origin","file://");
         httpServletResponse.setHeader("Access-Control-Allow-Credentials","true");
         User user=(User)httpServletRequest.getSession().getAttribute("user");
         //用户已登录
         if (user!=null){
+            System.out.println(projectentrepreneurship.getProjectid()+projectentrepreneurship.getProjectintroduction());
             String proId=projectentrepreneurship.getProjectid();
             Project mainProject=projectService.queryById(proId);
+            System.out.println(mainProject.getProjectname());
             if (proId!=null && mainProject!=null && mainProject.getProjectcatagory().equals("创业训练项目") && projectentrepreneurshipService.queryById(proId)==null){
+                projectentrepreneurship.setSigndate(new Date());
                 projectentrepreneurshipService.insert(projectentrepreneurship);
                 return new BaseResponse(1,"success","添加成功");
             }else {

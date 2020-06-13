@@ -55,9 +55,9 @@
     </select>
 
     <!--新增所有列-->
-    <insert id="insert" keyProperty="projectid" useGeneratedKeys="true">
-        insert into hzuspbproject.projectinnovate(ProjectApprovalBasis, ProjectResearchPlan, ProjectFeatureInnovation, ProjectResult, MemberTasks)
-        values (#{projectapprovalbasis}, #{projectresearchplan}, #{projectfeatureinnovation}, #{projectresult}, #{membertasks})
+    <insert id="insert" parameterType="rjzx.spboot.hzu.project.entity.Projectinnovate">
+        insert into hzuspbproject.projectinnovate(ProjectId,ProjectApprovalBasis, ProjectResearchPlan, ProjectFeatureInnovation, ProjectResult, MemberTasks)
+        values (#{projectid},#{projectapprovalbasis}, #{projectresearchplan}, #{projectfeatureinnovation}, #{projectresult}, #{membertasks})
     </insert>
 
     <!--通过主键修改数据-->

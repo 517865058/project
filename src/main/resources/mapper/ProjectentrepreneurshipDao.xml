@@ -71,9 +71,9 @@
     </select>
 
     <!--新增所有列-->
-    <insert id="insert" keyProperty="projectid" useGeneratedKeys="true">
-        insert into hzuspbproject.projectentrepreneurship(ProjectStatus, ProjectIntroduction, ProjectOutline, PlanInnovation, PlanFeasibility, FinanceBudgetRiskForcast, Statement, MainSignature, SignDate)
-        values (#{projectstatus}, #{projectintroduction}, #{projectoutline}, #{planinnovation}, #{planfeasibility}, #{financebudgetriskforcast}, #{statement}, #{mainsignature}, #{signdate})
+    <insert id="insert" parameterType="rjzx.spboot.hzu.project.entity.Projectentrepreneurship">
+        insert into hzuspbproject.projectentrepreneurship(ProjectId,ProjectStatus, ProjectIntroduction, ProjectOutline, PlanInnovation, PlanFeasibility, FinanceBudgetRiskForcast, Statement, MainSignature, SignDate)
+        values (#{projectid},#{projectstatus}, #{projectintroduction}, #{projectoutline}, #{planinnovation}, #{planfeasibility}, #{financebudgetriskforcast}, #{statement}, #{mainsignature}, #{signdate})
     </insert>
 
     <!--通过主键修改数据-->

@@ -40,7 +40,6 @@ public class ProjectinnovateController {
      */
     @RequestMapping(value = "/addInnoPro",method = RequestMethod.POST,consumes = "application/json;charset=UTF-8")
     public BaseResponse addInnovateProject(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse,@RequestBody Projectinnovate projectinnovate){
-        httpServletResponse.setHeader("Access-Control-Allow-Origin","file://");
         httpServletResponse.setHeader("Access-Control-Allow-Credentials","true");
         User user=(User)httpServletRequest.getSession().getAttribute("user");
         //用户已登录

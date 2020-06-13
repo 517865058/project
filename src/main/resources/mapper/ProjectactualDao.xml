@@ -39,9 +39,9 @@
     </select>
 
     <!--新增所有列-->
-    <insert id="insert" keyProperty="projectid" useGeneratedKeys="true">
-        insert into hzuspbproject.projectactual(ProjectBusinessPlan)
-        values (#{projectbusinessplan})
+    <insert id="insert" parameterType="rjzx.spboot.hzu.project.entity.Projectactual">
+        insert into hzuspbproject.projectactual(ProjectId,ProjectBusinessPlan)
+        values (#{projectid},#{projectbusinessplan})
     </insert>
 
     <!--通过主键修改数据-->

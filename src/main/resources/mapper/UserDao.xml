@@ -67,9 +67,9 @@
     </select>
 
     <!--新增所有列-->
-    <insert id="insert" keyProperty="userid" useGeneratedKeys="true">
-        insert into hzuspbproject.user(UserPwd, UserName, Permission, Role, Team, Phone, Email, College)
-        values (#{userpwd}, #{username}, #{permission}, #{role}, #{team}, #{phone}, #{email}, #{college})
+    <insert id="insert" parameterType="rjzx.spboot.hzu.project.entity.User">
+        insert into hzuspbproject.user(UserId,UserPwd, UserName, Permission, Role, Team, Phone, Email, College)
+        values (#{userid},#{userpwd}, #{username}, #{permission}, #{role}, #{team}, #{phone}, #{email}, #{college})
     </insert>
 
     <!--通过主键修改数据-->

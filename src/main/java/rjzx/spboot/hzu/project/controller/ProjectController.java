@@ -14,6 +14,7 @@ import rjzx.spboot.hzu.project.service.ProjectentrepreneurshipService;
 import rjzx.spboot.hzu.project.service.ProjectinnovateService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -166,27 +167,22 @@ public class ProjectController {
 
     /**
      * 申请项目
-     * @param jsonObject
+     * @param project
      * @return BaseResponse 3: 项目申请成功, 4: 项目申请失败, 项目已存在
      */
+
+    @RequestMapping(value = "/insertProject", method = RequestMethod.POST, consumes = "application/json;charset=UTF-8")
     @ResponseBody
-    @RequestMapping(value = "/insertProject", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public BaseResponse insertProject(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse,@RequestBody JSONObject jsonObject){
-        httpServletResponse.setHeader("Access-Control-Allow-Origin","file://");
+    public BaseResponse insertProject(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse,@RequestBody Project project){
+        httpServletResponse.setHeader("Access-Control-Allow-Origin","http://localhost:8080");
         httpServletResponse.setHeader("Access-Control-Allow-Credentials","true");
         User user=(User)httpServletRequest.getSession().getAttribute("user");
         //用户已登录
         if (user!=null){
-            Project project = new Project(jsonObject.get("projectid").toString(),
-                    jsonObject.get("projectname").toString(),
-                    jsonObject.get("projectcatagory").toString(),
-                    jsonObject.getDate("date"),
-                    Integer.valueOf(jsonObject.get("expense").toString()),
-                    jsonObject.get("teamid").toString(),
-                    jsonObject.get("teacher").toString());
             if (projectService.queryById(project.getProjectid()) != null){
                 return new BaseResponse(StatusCode.ProjectApplicationFail);
             }else {
+                project.setDate(new Date());
                 projectService.insert(project);
                 return new BaseResponse(StatusCode.ProjectApplicationSuccess);
             }
@@ -214,6 +210,24 @@ public class ProjectController {
         projectService.update(project);
         return new BaseResponse(StatusCode.ProjectUpdateSuccess);
     }
+
+
+    /**
+     * 完整项目
+     * @param project
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/addOthProject", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public BaseResponse creaProject(@RequestBody Project project){
+        Project dbProject = projectService.queryById(project.getProjectid());
+        dbProject.setTeacherevaluate(project.getTeacherevaluate());
+        dbProject.setSecondaryevaluate(project.getSecondaryevaluate());
+        dbProject.setJwcopinions(project.getJwcopinions());
+        projectService.update(dbProject);
+        return new BaseResponse(StatusCode.ProjectUpdateSuccess);
+    }
+
 
     @GetMapping("/selectFeedback")
     public String selectFeedback(String id) {

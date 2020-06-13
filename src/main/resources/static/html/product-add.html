@@ -10,10 +10,10 @@
 <link rel="Bookmark" href="/favicon.ico" >
 <link rel="Shortcut Icon" href="/favicon.ico" />
 <!--[if lt IE 9]>
-<script type="text/javascript" src="lib/html5shiv.js"></script>
-<script type="text/javascript" src="lib/respond.min.js"></script>
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
 
-<![endif]-->
+    <![endif]-->
 <link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css" />
 <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css" />
 <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css" />
@@ -21,16 +21,16 @@
 <link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin" />
 <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css" />
 <!--[if IE 6]>
-<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
-<script>DD_belatedPNG.fix('*');</script>
-<![endif]-->
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
 <!--/meta 作为公共模版分离出去-->
 
 <link href="lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div class="page-container">
-	<form action="/project/test" method="post" class="form form-horizontal" id="form-article-add">
+	<form action="" method="post" class="form form-horizontal" id="form-article-add">
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>项目ID：</label>
 			<div class="formControls col-xs-8 col-sm-9">
@@ -46,15 +46,9 @@
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">项目类别：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="radio" class="input-radio" value="1" name="projectcatagory"><span>创新训练项目</span>
-				<input type="radio" class="input-radio" value="2"  name="projectcatagory"><span>创业训练项目</span>
-				<input type="radio" class="input-radio" value="3"  name="projectcatagory"><span>创业实践项目</span>
-			</div>
-		</div>
-		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2">项目日期：</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="" name="date">
+				<input type="radio" class="input-radio" value="创新训练项目" name="projectcatagory"><span>创新训练项目</span>
+				<input type="radio" class="input-radio" value="创业训练项目"  name="projectcatagory"><span>创业训练项目</span>
+				<input type="radio" class="input-radio" value="创业实践项目"  name="projectcatagory"><span>创业实践项目</span>
 			</div>
 		</div>
 		<div class="row cl">
@@ -122,36 +116,70 @@
 <script type="text/javascript">
 
     function article_save_submit(){
-        var message;
-        switch ($("input[name='projectcatagory']:checked").val()) {
-			case "1":
-			    console.log("1");
-                message = {step:2,src:"product-add01.html"};
-			    break;
-			case "2":
-                console.log("2");
-                message = {step:2,src:"product-add02.html"};
-                break;
-            case "3":
-                console.log("3");
-                message = {step:2,src:"product-add05.html"};
-                break;
-        }
-        console.log("message"+message);
-        if(message!=undefined){
-            window.parent.postMessage(message,"*");
-            console.log(message);
-        }
 
 
 
     }
 
     $(document).ready(function(){
-        
-        $("#submitBtn").click(function(){
-            
-        })
+
+        $(':submit').on('click',function(){
+            $.ajax({
+                url:"http://localhost:8080/project/insertProject",
+                type:"post",
+                async:false,
+                xhrFields: {
+                    withCredentials: true // 这里设置了withCredentials
+                },
+                data:JSON.stringify($('form').serializeObject()),
+                contentType:"application/json;charset=UTF-8",  //缺失会出现URL编码，无法转成json对象
+                success:function(e){
+                    if(e.code==3){
+                        var message;
+                        switch ($("input[name='projectcatagory']:checked").val()) {
+                            case "创新训练项目":
+                                console.log("1");
+                                message = {step:2,src:"product-add01.html"};
+                                break;
+                            case "创业训练项目":
+                                console.log("2");
+                                message = {step:2,src:"product-add02.html"};
+                                break;
+                            case "创业实践项目":
+                                console.log("3");
+                                message = {step:2,src:"product-add05.html"};
+                                break;
+                        }
+                        console.log("message"+message);
+                        if(message!=undefined){
+                            window.parent.postMessage(message,"*");
+                            console.log(message);
+                        }
+
+                    }else {
+                        alert(e);
+					}
+                    console.log(e);
+                }
+            });
+        });
+
+
+        $.fn.serializeObject = function() {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function() {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [ o[this.name] ];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
         
     })
 

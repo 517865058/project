@@ -60,6 +60,7 @@
             $("#4").attr("class","last");
         }else if (data.step==4) {
             $("#project").attr("src",e.data.src);
+            window.frames[0].postMessage(e.data.status,"*");
             $("#1").attr("class","done");
             $("#2").attr("class","done");
             $("#3").attr("class","current_prev");

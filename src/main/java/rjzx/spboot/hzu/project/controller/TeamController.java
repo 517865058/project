@@ -36,7 +36,6 @@ public class TeamController {
      */
     @RequestMapping(value = "/addTeam", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public BaseResponse addTeam(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, @RequestBody Team team){
-        httpServletResponse.setHeader("Access-Control-Allow-Origin","file://");
         httpServletResponse.setHeader("Access-Control-Allow-Credentials","true");
         User user=(User)httpServletRequest.getSession().getAttribute("user");
         //用户已登录

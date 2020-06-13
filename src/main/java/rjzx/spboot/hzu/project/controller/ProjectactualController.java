@@ -41,7 +41,6 @@ public class ProjectactualController {
      */
     @RequestMapping(value = "/addActPro",method = RequestMethod.POST,consumes = "application/json;charset=UTF-8")
     public BaseResponse addActualProject(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, @RequestBody Projectactual projectactual){
-        httpServletResponse.setHeader("Access-Control-Allow-Origin","file://");
         httpServletResponse.setHeader("Access-Control-Allow-Credentials","true");
         User user=(User)httpServletRequest.getSession().getAttribute("user");
         //用户已登录
